@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Suhail Ismail Kunju — Digital &amp; Senior IT Specialist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0D1117;
+    --panel: #161B22;
+    --panel-2: #1C2229;
+    --line: #262D38;
+    --teal: #4FD1C5;
+    --amber: #E8A94C;
+    --text: #E6E9EF;
+    --muted: #6B7280;
+    --muted-2: #8A93A3;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+  ::selection{background:var(--teal);color:#0D1117;}
+  a{color:inherit;text-decoration:none;}
+
+  .mono{font-family:'JetBrains Mono',monospace;}
+
+  /* background grid texture */
+  body::before{
+    content:"";
+    position:fixed; inset:0;
+    background-image:
+      linear-gradient(rgba(79,209,197,0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(79,209,197,0.035) 1px, transparent 1px);
+    background-size:44px 44px;
+    pointer-events:none;
+    z-index:0;
+  }
+
+  .wrap{max-width:1080px;margin:0 auto;padding:0 28px;position:relative;z-index:1;}
+
+  /* ===== NAV ===== */
+  header.nav{
+    position:sticky; top:0; z-index:50;
+    background:rgba(13,17,23,0.85);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-inner{
+    max-width:1080px;margin:0 auto;padding:16px 28px;
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .nav-brand{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:14px;letter-spacing:0.06em;color:var(--text);display:flex;align-items:center;gap:8px;}
+  .nav-brand .dot{width:8px;height:8px;border-radius:50%;background:var(--teal);box-shadow:0 0 8px var(--teal);animation:pulse 2.4s infinite;}
+  .nav-links{display:flex;gap:28px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;}
+  .nav-links a{color:var(--muted-2);transition:color .2s;}
+  .nav-links a:hover{color:var(--teal);}
+  @media (max-width:640px){.nav-links{display:none;}}
+
+  @keyframes pulse{
+    0%,100%{opacity:1;}
+    50%{opacity:.35;}
+  }
+
+  /* ===== HERO ===== */
+  .hero{padding:88px 0 64px;position:relative;}
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;color:var(--teal);letter-spacing:0.14em;text-transform:uppercase;
+    display:flex;align-items:center;gap:10px;margin-bottom:22px;
+  }
+  .eyebrow::before{content:"";width:22px;height:1px;background:var(--teal);display:inline-block;}
+  h1.name{
+    font-family:'JetBrains Mono',monospace;
+    font-weight:800;
+    font-size:clamp(2.4rem, 6vw, 4.2rem);
+    line-height:1.04;
+    letter-spacing:-0.01em;
+    margin-bottom:18px;
+  }
+  h1.name .last{color:var(--muted-2);}
+  .role{
+    font-size:clamp(1.05rem,2.4vw,1.35rem);
+    color:var(--muted-2);
+    max-width:640px;
+    margin-bottom:34px;
+  }
+  .hero-meta{
+    display:flex;flex-wrap:wrap;gap:10px 22px;
+    font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--muted);
+    margin-bottom:46px;
+  }
+  .hero-meta span{display:flex;align-items:center;gap:7px;}
+  .hero-meta a:hover{color:var(--teal);}
+
+  /* status console */
+  .console{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:10px;
+    overflow:hidden;
+  }
+  .console-head{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:12px 18px;
+    border-bottom:1px solid var(--line);
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted-2);
+  }
+  .console-head .dots{display:flex;gap:6px;}
+  .console-head .dots i{width:9px;height:9px;border-radius:50%;background:#3a4149;display:block;}
+  .console-body{padding:18px;}
+  .grid-zones{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(130px,1fr));
+    gap:10px;
+    margin-bottom:16px;
+  }
+  .zone{
+    background:var(--panel-2);
+    border:1px solid var(--line);
+    border-radius:7px;
+    padding:11px 12px;
+    font-family:'JetBrains Mono',monospace;
+  }
+  .zone .z-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+  .zone .z-name{font-size:11.5px;color:var(--muted-2);letter-spacing:0.03em;}
+  .zone .z-led{width:7px;height:7px;border-radius:50%;background:var(--teal);box-shadow:0 0 6px var(--teal);animation:pulse 2.2s infinite;}
+  .zone.warn .z-led{background:var(--amber);box-shadow:0 0 6px var(--amber);}
+  .zone .z-status{font-size:10.5px;color:var(--muted);}
+  .console-log{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;
+    color:var(--muted-2);
+    border-top:1px dashed var(--line);
+    padding-top:14px;
+    min-height:20px;
+  }
+  .console-log .cursor{display:inline-block;width:7px;height:13px;background:var(--teal);vertical-align:-2px;animation:pulse 1s infinite;margin-left:2px;}
+
+  /* ===== SECTION SCAFFOLD ===== */
+  section{padding:78px 0;border-top:1px solid var(--line);}
+  .sec-head{display:flex;align-items:baseline;gap:16px;margin-bottom:40px;flex-wrap:wrap;}
+  .sec-tag{
+    font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--teal);letter-spacing:0.12em;text-transform:uppercase;
+  }
+  .sec-title{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:1.7rem;}
+  .sec-sub{color:var(--muted);font-size:14px;max-width:520px;}
+
+  .reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease, transform .6s ease;}
+  .reveal.in{opacity:1;transform:translateY(0);}
+
+  /* ===== PROFILE ===== */
+  .profile-grid{display:grid;grid-template-columns:1fr 1.5fr;gap:40px;align-items:start;}
+  @media (max-width:760px){.profile-grid{grid-template-columns:1fr;}}
+  .profile-card{
+    background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:22px;
+  }
+  .profile-card .k{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px;}
+  .profile-card .v{font-size:14px;margin-bottom:16px;}
+  .profile-card .v:last-child{margin-bottom:0;}
+  .profile-text p{color:var(--muted-2);font-size:15.5px;margin-bottom:14px;}
+  .lang-list{display:flex;flex-wrap:wrap;gap:8px;}
+  .lang-list span{
+    font-family:'JetBrains Mono',monospace;font-size:11px;background:var(--panel-2);border:1px solid var(--line);
+    padding:5px 10px;border-radius:5px;color:var(--muted-2);
+  }
+
+  /* ===== LOG / EXPERIENCE ===== */
+  .log-entry{
+    display:grid;grid-template-columns:150px 1fr;gap:24px;
+    padding:28px 0;border-bottom:1px solid var(--line);
+  }
+  .log-entry:last-child{border-bottom:none;}
+  @media (max-width:640px){.log-entry{grid-template-columns:1fr;gap:8px;}}
+  .log-time{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);}
+  .log-time .current{color:var(--teal);font-weight:600;}
+  .log-time .status-tag{
+    display:inline-block;margin-top:8px;font-size:10px;padding:3px 8px;border-radius:4px;
+    background:rgba(79,209,197,0.1);color:var(--teal);border:1px solid rgba(79,209,197,0.3);
+  }
+  .log-role{font-weight:600;font-size:17px;margin-bottom:2px;}
+  .log-org{color:var(--muted-2);font-size:14px;margin-bottom:12px;}
+  .log-org .loc{color:var(--muted);}
+  .log-detail{color:var(--muted-2);font-size:14.5px;margin-bottom:8px;}
+  .log-detail:last-child{margin-bottom:0;}
+  .log-detail::before{content:"› ";color:var(--teal);font-family:'JetBrains Mono',monospace;}
+
+  /* ===== MODULES / SKILLS ===== */
+  .modules-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;}
+  .module{
+    background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:22px;
+    transition:border-color .25s, transform .25s;
+  }
+  .module:hover{border-color:var(--teal);transform:translateY(-3px);}
+  .module-head{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+  .module-idx{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--amber);}
+  .module-title{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:14.5px;}
+  .module-tags{display:flex;flex-wrap:wrap;gap:7px;}
+  .module-tags span{
+    font-size:11.5px;color:var(--muted-2);background:var(--panel-2);border:1px solid var(--line);
+    padding:4px 9px;border-radius:5px;
+  }
+
+  /* ===== CERTS ===== */
+  .certs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;}
+  .cert{
+    background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:14px 16px;
+    display:flex;align-items:flex-start;gap:10px;font-size:13px;
+  }
+  .cert .ck{color:var(--teal);font-family:'JetBrains Mono',monospace;font-size:13px;margin-top:1px;}
+  .cert-name{font-weight:600;font-size:13.5px;}
+  .cert-issuer{color:var(--muted);font-size:11.5px;}
+
+  /* ===== PROJECTS ===== */
+  .proj-list{display:flex;flex-direction:column;gap:16px;}
+  .proj{
+    background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:22px;
+    display:grid;grid-template-columns:140px 1fr;gap:20px;
+  }
+  @media (max-width:640px){.proj{grid-template-columns:1fr;}}
+  .proj-tag{
+    font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);align-self:start;
+  }
+  .proj-tag .badge{
+    display:inline-block;margin-top:8px;font-size:10px;padding:3px 8px;border-radius:4px;
+    background:rgba(232,169,76,0.1);color:var(--amber);border:1px solid rgba(232,169,76,0.3);
+  }
+  .proj-title{font-weight:600;font-size:16px;margin-bottom:8px;}
+  .proj-desc{color:var(--muted-2);font-size:14px;}
+
+  /* ===== CHANNELS / CONNECT ===== */
+  .channels-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;}
+  .channel-card{
+    background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:24px;
+    transition:border-color .25s, transform .25s;
+    display:flex;flex-direction:column;gap:14px;
+  }
+  .channel-card:hover{border-color:var(--teal);transform:translateY(-3px);}
+  .channel-top{display:flex;align-items:center;justify-content:space-between;}
+  .channel-icon{
+    width:38px;height:38px;border-radius:8px;
+    display:flex;align-items:center;justify-content:center;
+    background:var(--panel-2);border:1px solid var(--line);
+    font-size:17px;
+  }
+  .channel-live{
+    font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.06em;
+    color:var(--teal);border:1px solid rgba(79,209,197,0.3);background:rgba(79,209,197,0.1);
+    padding:3px 8px;border-radius:4px;
+  }
+  .channel-name{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:15px;}
+  .channel-handle{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);}
+  .channel-desc{color:var(--muted-2);font-size:13.5px;}
+  .channel-cta{
+    margin-top:auto;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--teal);
+    display:flex;align-items:center;gap:6px;
+  }
+  .channel-card:hover .channel-cta{text-decoration:underline;}
+
+  /* whatsapp floating button */
+  .wa-float{
+    position:fixed;right:22px;bottom:22px;z-index:60;
+    width:54px;height:54px;border-radius:50%;
+    background:#25D366;display:flex;align-items:center;justify-content:center;
+    box-shadow:0 6px 20px rgba(0,0,0,0.35);
+    transition:transform .2s;
+  }
+  .wa-float:hover{transform:scale(1.08);}
+  .wa-float svg{width:26px;height:26px;fill:#0D1117;}
+
+  /* ===== CONTACT / FOOTER ===== */
+  .contact{text-align:left;}
+  .contact-title{font-family:'JetBrains Mono',monospace;font-weight:800;font-size:clamp(1.8rem,4.5vw,2.6rem);margin-bottom:18px;}
+  .contact-title .cursor2{display:inline-block;width:12px;height:26px;background:var(--teal);vertical-align:-4px;animation:pulse 1s infinite;margin-left:4px;}
+  .contact-sub{color:var(--muted-2);max-width:480px;margin-bottom:34px;font-size:15px;}
+  .contact-links{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:56px;}
+  .contact-links a{
+    font-family:'JetBrains Mono',monospace;font-size:13px;
+    border:1px solid var(--line);padding:12px 18px;border-radius:8px;
+    color:var(--text);transition:border-color .2s, color .2s;
+    display:flex;align-items:center;gap:8px;
+  }
+  .contact-links a:hover{border-color:var(--teal);color:var(--teal);}
+  footer{
+    border-top:1px solid var(--line);padding:26px 0;
+    display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;
+    font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--muted);
+  }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner">
+    <div class="nav-brand"><span class="dot"></span>SIK<span style="color:var(--muted)">.sys</span></div>
+    <nav class="nav-links">
+      <a href="#profile">Profile</a>
+      <a href="#log">Log</a>
+      <a href="#modules">Modules</a>
+      <a href="#certs">Certs</a>
+      <a href="#projects">Projects</a>
+      <a href="#channels">Connect</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- HERO -->
+  <section class="hero" style="border-top:none;padding-bottom:64px;">
+    <div class="eyebrow">System Status: Online — Doha, QA</div>
+    <h1 class="name">SUHAIL ISMAIL<br><span class="last">KUNJU</span></h1>
+    <p class="role">Digital &amp; Senior IT Specialist — securing networks, administering systems, and keeping enterprise infrastructure and AV control rooms running without interruption.</p>
+    <div class="hero-meta">
+      <span>✉ <a href="mailto:Sikunju@outlook.com">Sikunju@outlook.com</a></span>
+      <span>☎ +974-5014-0100</span>
+      <span>📍 Doha, Qatar</span>
+      <span>in <a href="https://linkedin.com/in/sikunju-ib17015243" target="_blank" rel="noopener">/sikunju-ib17015243</a></span>
+      <span>💬 <a href="https://wa.me/97450140100" target="_blank" rel="noopener">WhatsApp</a></span>
+      <span>⌥ <a href="https://github.com/sikunju" target="_blank" rel="noopener">github.com/sikunju</a></span>
+      <span>▶ <a href="https://www.youtube.com/@KernelForge1" target="_blank" rel="noopener">@KernelForge1</a></span>
+    </div>
+
+    <div class="console">
+      <div class="console-head">
+        <span>gallery_monitor.status</span>
+        <div class="dots"><i></i><i></i><i></i></div>
+      </div>
+      <div class="console-body">
+        <div class="grid-zones" id="zones"></div>
+        <div class="console-log" id="typeline">&nbsp;<span class="cursor"></span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROFILE -->
+  <section id="profile">
+    <div class="sec-head reveal">
+      <span class="sec-tag">01</span>
+      <span class="sec-title">Profile</span>
+    </div>
+    <div class="profile-grid reveal">
+      <div class="profile-card">
+        <div class="k">Experience</div>
+        <div class="v">10+ years</div>
+        <div class="k">Nationality</div>
+        <div class="v">Indian</div>
+        <div class="k">Based in</div>
+        <div class="v">Doha, Qatar</div>
+        <div class="k">Languages</div>
+        <div class="v">
+          <div class="lang-list">
+            <span>English</span><span>Tamil</span><span>Hindi</span><span>Malayalam</span><span>Arabic</span>
+          </div>
+        </div>
+      </div>
+      <div class="profile-text">
+        <p>A senior IT and infrastructure professional with over a decade of hands-on experience across systems administration, network management, and cybersecurity — with digital media and AV operations as a strong secondary specialization. Suhail plans, deploys, and hardens the systems that keep organizations running: from self-hosted remote access infrastructure to enterprise asset management and network security.</p>
+        <p>Methodical and security-conscious by default, Suhail brings a structured, root-cause approach to IT operations — whether that's hardening a network, administering enterprise systems, or building automation to reduce manual intervention. Certified in ethical hacking, penetration testing, and enterprise systems administration, with hands-on lab experience in Kali Linux and real-world incident response.</p>
+        <p>Currently leading digital and IT operations at one of Qatar's flagship cultural institutions, while independently building and shipping IT tooling — including a self-hosted remote desktop platform, an enterprise Wake-on-LAN system, and an open-source Windows IT toolkit.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- LOG / EXPERIENCE -->
+  <section id="log">
+    <div class="sec-head reveal">
+      <span class="sec-tag">02</span>
+      <span class="sec-title">Log</span>
+      <span class="sec-sub">Professional experience, ordered newest first — like an incident log.</span>
+    </div>
+
+    <div class="reveal" id="log-list"></div>
+  </section>
+
+  <!-- MODULES / SKILLS -->
+  <section id="modules">
+    <div class="sec-head reveal">
+      <span class="sec-tag">03</span>
+      <span class="sec-title">Modules</span>
+      <span class="sec-sub">Core skill sets, grouped by domain.</span>
+    </div>
+    <div class="modules-grid reveal">
+      <div class="module">
+        <div class="module-head"><span class="module-idx">OPS</span><span class="module-title">IT Operations</span></div>
+        <div class="module-tags">
+          <span>Systems Administration</span><span>Cloud &amp; Virtualization</span><span>Network Management</span><span>Disaster Recovery</span><span>Scripting &amp; Automation</span><span>Technical Support</span>
+        </div>
+      </div>
+      <div class="module">
+        <div class="module-head"><span class="module-idx">SEC</span><span class="module-title">Cybersecurity</span></div>
+        <div class="module-tags">
+          <span>Kali Linux</span><span>WebSploit</span><span>Penetration Testing</span><span>Threat &amp; Vulnerability Mgmt</span><span>Risk Assessment</span><span>Threat Detection</span><span>Network Vulnerabilities</span><span>SecOps</span>
+        </div>
+      </div>
+      <div class="module">
+        <div class="module-head"><span class="module-idx">MGT</span><span class="module-title">Management &amp; Data</span></div>
+        <div class="module-tags">
+          <span>Project Leadership</span><span>CRM</span><span>CMS</span><span>Content Management</span><span>Generative AI</span><span>LLMs</span><span>Decision Management</span>
+        </div>
+      </div>
+      <div class="module">
+        <div class="module-head"><span class="module-idx">AV</span><span class="module-title">Audio Visual Systems</span></div>
+        <div class="module-tags">
+          <span>Crestron Systems</span><span>Barco</span><span>BrightSign</span><span>Q-SYS</span><span>Dante</span><span>Control Rooms</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CERTS -->
+  <section id="certs">
+    <div class="sec-head reveal">
+      <span class="sec-tag">04</span>
+      <span class="sec-title">Certifications</span>
+      <span class="sec-sub">Verified credentials across AV, security, and IT.</span>
+    </div>
+    <div class="certs-grid reveal" id="certs-list"></div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="sec-head reveal">
+      <span class="sec-tag">05</span>
+      <span class="sec-title">Projects</span>
+      <span class="sec-sub">Independent builds and simulations, deployed and documented.</span>
+    </div>
+    <!--
+      ============================================================
+      TO ADD A NEW PROJECT LATER:
+      Scroll down to the <script> section near the bottom of this
+      file and find the "PROJECTS" array. Add a new object to the
+      TOP of that array (so it shows first) following the same
+      format as the existing entries. No other changes needed —
+      the card is built automatically.
+      ============================================================
+    -->
+    <div class="proj-list reveal" id="proj-list"></div>
+  </section>
+
+  <!-- CHANNELS -->
+  <section id="channels">
+    <div class="sec-head reveal">
+      <span class="sec-tag">06</span>
+      <span class="sec-title">Channels</span>
+      <span class="sec-sub">Where the work gets documented and shared.</span>
+    </div>
+    <div class="channels-grid reveal">
+
+      <a class="channel-card" href="https://www.youtube.com/@KernelForge1" target="_blank" rel="noopener">
+        <div class="channel-top">
+          <div class="channel-icon">▶</div>
+          <span class="channel-live">NEW CHANNEL</span>
+        </div>
+        <div>
+          <div class="channel-name">KernelForge</div>
+          <div class="channel-handle">@KernelForge1 · YouTube</div>
+        </div>
+        <div class="channel-desc">Deep technical tutorials on AI engineering, cybersecurity labs, scripting, and Windows &amp; Linux system customization — with a mix of tech builds and travel across an Indo-Filipino lens.</div>
+        <div class="channel-cta">Watch the channel →</div>
+      </a>
+
+      <a class="channel-card" href="https://github.com/sikunju/Windows-IT-Toolkit" target="_blank" rel="noopener">
+        <div class="channel-top">
+          <div class="channel-icon">⌥</div>
+          <span class="channel-live">OPEN SOURCE</span>
+        </div>
+        <div>
+          <div class="channel-name">Windows-IT-Toolkit</div>
+          <div class="channel-handle">github.com/sikunju</div>
+        </div>
+        <div class="channel-desc">A single-file Batch toolkit bundling system, network, security, performance, and admin utilities into one modular menu for Windows 10/11 — zero external dependencies.</div>
+        <div class="channel-cta">View the repo →</div>
+      </a>
+
+      <a class="channel-card" href="https://wa.me/97450140100" target="_blank" rel="noopener">
+        <div class="channel-top">
+          <div class="channel-icon">💬</div>
+          <span class="channel-live">DIRECT</span>
+        </div>
+        <div>
+          <div class="channel-name">WhatsApp</div>
+          <div class="channel-handle">+974 5014 0100</div>
+        </div>
+        <div class="channel-desc">Fastest way to reach out directly — for roles, collaborations, or a quick technical chat.</div>
+        <div class="channel-cta">Start a chat →</div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="contact reveal">
+      <div class="contact-title">Let's talk systems<span class="cursor2"></span></div>
+      <p class="contact-sub">Open to roles across digital media operations, AV engineering, and cybersecurity. Based in Doha, available for opportunities across Qatar and remotely.</p>
+      <div class="contact-links">
+        <a href="mailto:Sikunju@outlook.com">✉ Sikunju@outlook.com</a>
+        <a href="https://wa.me/97450140100" target="_blank" rel="noopener">💬 WhatsApp</a>
+        <a href="tel:+97450140100">☎ +974-5014-0100</a>
+        <a href="https://linkedin.com/in/sikunju-ib17015243" target="_blank" rel="noopener">in LinkedIn</a>
+        <a href="https://github.com/sikunju" target="_blank" rel="noopener">⌥ GitHub</a>
+        <a href="https://www.youtube.com/@KernelForge1" target="_blank" rel="noopener">▶ YouTube</a>
+      </div>
+    </div>
+    <footer>
+      <span>© 2026 Suhail Ismail Kunju</span>
+      <span>uptime: 10+ years · status: <span style="color:var(--teal)">available</span></span>
+    </footer>
+  </section>
+
+</div>
+
+<a class="wa-float" href="https://wa.me/97450140100" target="_blank" rel="noopener" aria-label="Message on WhatsApp">
+  <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.626.712.226 1.36.194 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12.001 2C6.478 2 2 6.477 2 12c0 1.986.583 3.833 1.588 5.386L2 22l4.735-1.55A9.953 9.953 0 0 0 12 22c5.523 0 10-4.477 10-10S17.523 2 12.001 2zm0 18.001a8.02 8.02 0 0 1-4.087-1.117l-.293-.174-3.043.996.997-3.033-.19-.302A7.958 7.958 0 0 1 4 12c0-4.411 3.589-8 8.001-8 4.411 0 8 3.589 8 8 0 4.412-3.589 8.001-8 8.001z"/></svg>
+</a>
+
+<script>
+  // ==========================================================
+  // PROJECTS DATA
+  // Add new projects here — newest at the TOP of the array.
+  // Fields:
+  //   tag    -> date range or category shown on the left (e.g. "01/2026 – 07/2026", "Open source")
+  //   badge  -> short status word (e.g. "ACTIVE", "DEPLOYED", "ONGOING", "COMPLETE")
+  //   title  -> project name
+  //   link   -> optional URL (GitHub, live site, etc). Leave as "" if none.
+  //   desc   -> 1-3 sentence description
+  // ==========================================================
+  const PROJECTS = [
+    {
+      tag: "Open source",
+      badge: "ACTIVE",
+      title: "KernelForge — Windows IT Toolkit",
+      link: "https://github.com/sikunju/Windows-IT-Toolkit",
+      desc: "A self-built, single-file Batch toolkit for Windows 10/11 that puts system, network, security, performance, reporting, and admin tools behind one modular menu — no external dependencies, built for IT professionals who need to troubleshoot fast."
+    },
+    {
+      tag: "01/2026 – 07/2026",
+      badge: "DEPLOYED",
+      title: "Remote Desktop Software Implementation",
+      link: "",
+      desc: "Designed and deployed a fully self-hosted, on-premises Remote Desktop infrastructure with encrypted communication, role-based access control, firewall and network hardening, and continuous monitoring — removing reliance on third-party cloud services entirely."
+    },
+    {
+      tag: "2021 – present",
+      badge: "ONGOING",
+      title: "Qatar Olympic Sports Museum — AV Museography Management",
+      link: "",
+      desc: "First point of contact for installation, configuration, and maintenance across 100+ digital exhibit equipment units museum-wide."
+    },
+    {
+      tag: "01/2025 – 09/2025",
+      badge: "DEPLOYED",
+      title: "Enterprise Wake-on-LAN Management System",
+      link: "",
+      desc: "Built an in-house WoL platform that continuously monitors device status and automatically sends magic packets to power on offline systems, maximizing workstation availability with minimal manual IT intervention."
+    },
+    {
+      tag: "In-house",
+      badge: "DEPLOYED",
+      title: "IT Asset Management System",
+      link: "",
+      desc: "Designed and deployed a centralized asset management platform to replace manual tracking, improving visibility, accountability, and lifecycle management organization-wide."
+    },
+    {
+      tag: "Simulation",
+      badge: "COMPLETE",
+      title: "Cognizant — Artificial Intelligence Job Simulation",
+      link: "",
+      desc: "Conducted exploratory data analysis in Python/Google Colab, built a training module with performance metrics, and presented findings to the business."
+    },
+    {
+      tag: "Simulation",
+      badge: "COMPLETE",
+      title: "JPMorgan Chase & Co. — Cybersecurity Job Simulation",
+      link: "",
+      desc: "Analyzed a large financial-fraud dataset, explored application security fundamentals, and built a spam/ham email classifier."
+    },
+    {
+      tag: "Simulation",
+      badge: "COMPLETE",
+      title: "PwC US — Cyber Security Consulting Job Simulation",
+      link: "",
+      desc: "Completed a risk assessment and SDLC walkthrough, ITGC design and operating-effectiveness testing, and a controls-testing summary presentation."
+    }
+  ];
+
+  const projList = document.getElementById('proj-list');
+  PROJECTS.forEach(p => {
+    const titleHtml = p.link
+      ? `${p.title} <a href="${p.link}" target="_blank" rel="noopener" style="color:var(--teal);font-size:13px;font-family:'JetBrains Mono',monospace;font-weight:400;">↗ ${p.link.replace('https://','')}</a>`
+      : p.title;
+    const el = document.createElement('div');
+    el.className = 'proj';
+    el.innerHTML = `
+      <div class="proj-tag">${p.tag}<div class="badge">${p.badge}</div></div>
+      <div>
+        <div class="proj-title">${titleHtml}</div>
+        <div class="proj-desc">${p.desc}</div>
+      </div>`;
+    projList.appendChild(el);
+  });
+
+  // ==========================================================
+  // EXPERIENCE ("LOG") DATA — add new roles at the TOP of the array.
+  // Fields: time, location, current (true/false), role, org, details (array of bullet strings)
+  // ==========================================================
+  const LOG_ENTRIES = [
+    {
+      time: "06/2021 → present",
+      location: "Doha, Qatar",
+      current: true,
+      role: "Digital Media &amp; IT Specialist",
+      org: "321 Qatar Olympic Sports Museum",
+      details: [
+        "Owns end-to-end digital asset and content operations across all museum galleries — ingestion, cataloguing, quality control, versioning, and long-term archival storage.",
+        "Coordinates metadata standards, file naming conventions, backup strategies, and access controls for the museum's digital sports archive.",
+        "Schedules, updates, and deploys media to playback systems, interactive displays, and control platforms, with first-line and advanced troubleshooting.",
+        "Maintains all digital interactive experiences across the Activation Zone and Galleries 1–6, resolving playback errors, sync issues, screen failures, and asset mismatches through structured incident logging and root-cause analysis."
+      ]
+    },
+    {
+      time: "09/2020 → 06/2021",
+      location: "Doha, Qatar",
+      current: false,
+      role: "Information Technology Analyst",
+      org: "Smartech",
+      details: [
+        "Managed data collection, research, and analysis for the development of new projects.",
+        "Researched and presented new ideas to improve business processes, analyzing statistical data, market trends, and relevant legislation."
+      ]
+    },
+    {
+      time: "12/2018 → 08/2019",
+      location: "Doha, Qatar",
+      current: false,
+      role: "Head of Information Technology Operations",
+      org: "Smartest Information Technology",
+      details: [
+        "Oversaw day-to-day IT department activities, technical support, and enterprise system reliability.",
+        "Worked closely with other departments to ensure IT infrastructure met the evolving needs of the business."
+      ]
+    },
+    {
+      time: "02/2017 → 12/2018",
+      location: "Bangalore, India",
+      current: false,
+      role: "Desktop Support Specialist",
+      org: "Uriah Solutions Private Limited",
+      details: [
+        "Supported incidents, problems, and requests across a broad range of technologies and business areas.",
+        "Handled IT requests via phone, email, live chat, and instant message, translating technical solutions into plain terms."
+      ]
+    },
+    {
+      time: "02/2016 → 02/2017",
+      location: "Bangalore, India",
+      current: false,
+      role: "Technical Solution Representative",
+      org: "Hewlett Packard Enterprise (HPE)",
+      details: [
+        "Managed and repaired IT systems, diagnosing software and hardware faults remotely.",
+        "Assisted internal team training and conducted technical compliance checks."
+      ]
+    },
+    {
+      time: "04/2014 → 01/2016",
+      location: "Trivandrum, India",
+      current: false,
+      role: "Desktop Support Engineer",
+      org: "Crease Technology Private Limited",
+      details: [
+        "Provided routine guidance to IT system users, maintaining a deep understanding of evolving tech trends.",
+        "Resolved trouble tickets quickly to avoid downtime."
+      ]
+    }
+  ];
+
+  const logList = document.getElementById('log-list');
+  LOG_ENTRIES.forEach(e => {
+    const timeHtml = e.current
+      ? `<span class="current">${e.time}</span><br>${e.location}<div class="status-tag">ACTIVE</div>`
+      : `${e.time}<br>${e.location}`;
+    const detailsHtml = e.details.map(d => `<div class="log-detail">${d}</div>`).join('');
+    const el = document.createElement('div');
+    el.className = 'log-entry';
+    el.innerHTML = `
+      <div class="log-time">${timeHtml}</div>
+      <div>
+        <div class="log-role">${e.role}</div>
+        <div class="log-org">${e.org}</div>
+        ${detailsHtml}
+      </div>`;
+    logList.appendChild(el);
+  });
+
+  // ==========================================================
+  // CERTIFICATIONS DATA — add new certs at the TOP of the array.
+  // Fields: name, issuer
+  // ==========================================================
+  const CERTIFICATIONS = [
+    { name: "Ethical Hacker, Level 2", issuer: "Cisco" },
+    { name: "Cisco Certified Ethical Hacker", issuer: "Cisco" },
+    { name: "Ethical Hacking Essentials (EHE)", issuer: "EC-Council" },
+    { name: "ISC2 Candidate", issuer: "ISC2" },
+    { name: "Cyber Security, Level 2", issuer: "Independent" },
+    { name: "United Nation Cyber Crime Prevention", issuer: "Level 1" },
+    { name: "MCSA, Level 1", issuer: "Microsoft" },
+    { name: "MCP, Level 1", issuer: "Microsoft" },
+    { name: "ITIL v3, Level 1", issuer: "HPE" },
+    { name: "Dante Certification, Level 1 &amp; 2", issuer: "Audinate" },
+    { name: "Crestron Core", issuer: "Crestron" },
+    { name: "Crestron Certified Audio Tech", issuer: "Crestron" },
+    { name: "Barco Technical Specialist", issuer: "Barco" },
+    { name: "Barco Technical Specialist — High Brightness", issuer: "Barco" },
+    { name: "Barco CTRL Technical Associate", issuer: "Barco" },
+    { name: "Q_SYS Architect, Level 1", issuer: "QSC" },
+    { name: "QSC Enterprise Manager", issuer: "QSC" },
+    { name: "BrightSign, Advanced Level", issuer: "BrightSign" },
+    { name: "Generative AI, Level 1", issuer: "Google" },
+    { name: "Safety Training", issuer: "Barco" }
+  ];
+
+  const certsList = document.getElementById('certs-list');
+  CERTIFICATIONS.forEach(c => {
+    const el = document.createElement('div');
+    el.className = 'cert';
+    el.innerHTML = `<span class="ck">✓</span><div><div class="cert-name">${c.name}</div><div class="cert-issuer">${c.issuer}</div></div>`;
+    certsList.appendChild(el);
+  });
+
+  // Zone status panel
+  const zoneNames = ["Activation Zone","Gallery 1","Gallery 2","Gallery 3","Gallery 4","Gallery 5","Gallery 6"];
+  const zones = document.getElementById('zones');
+  zoneNames.forEach((name, i) => {
+    const warn = i === 3; // one zone flagged, to feel real
+    const div = document.createElement('div');
+    div.className = 'zone' + (warn ? ' warn' : '');
+    div.innerHTML = `<div class="z-top"><span class="z-name">${name}</span><span class="z-led"></span></div><div class="z-status">${warn ? 'sync check' : 'nominal'}</div>`;
+    zones.appendChild(div);
+  });
+
+  // typed log line
+  const lines = [
+    "> monitoring digital interactive experiences across all galleries...",
+    "> asset sync: 100% integrity verified",
+    "> incident log: 0 open, root-cause protocol ready",
+    "> uptime: 10+ years in AV, IT & cybersecurity"
+  ];
+  const typeEl = document.getElementById('typeline');
+  let li = 0, ci = 0, deleting = false;
+  function typeLoop(){
+    const current = lines[li];
+    if(!deleting){
+      ci++;
+      typeEl.innerHTML = current.slice(0, ci) + '<span class="cursor"></span>';
+      if(ci === current.length){ deleting = true; setTimeout(typeLoop, 1400); return; }
+    } else {
+      ci--;
+      typeEl.innerHTML = current.slice(0, ci) + '<span class="cursor"></span>';
+      if(ci === 0){ deleting = false; li = (li+1) % lines.length; }
+    }
+    setTimeout(typeLoop, deleting ? 22 : 38);
+  }
+  typeLoop();
+
+  // scroll reveal
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // respect reduced motion
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.querySelectorAll('.reveal').forEach(el => el.classList.add('in'));
+    document.querySelectorAll('.z-led, .dot, .cursor, .cursor2').forEach(el => el.style.animation = 'none');
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KernelForge Admin — Publish Update</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0D1117; --panel:#161B22; --panel-2:#1C2229; --line:#262D38;
+    --teal:#4FD1C5; --amber:#E8A94C; --text:#E6E9EF; --muted:#6B7280; --muted-2:#8A93A3;
+    --danger:#E85C4C;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;line-height:1.55;padding:32px 20px 80px;}
+  .wrap{max-width:760px;margin:0 auto;}
+  .mono{font-family:'JetBrains Mono',monospace;}
+  a{color:var(--teal);}
+
+  header{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
+  header .dot{width:9px;height:9px;border-radius:50%;background:var(--teal);box-shadow:0 0 8px var(--teal);animation:pulse 2.2s infinite;}
+  header h1{font-family:'JetBrains Mono',monospace;font-size:1.3rem;font-weight:700;}
+  .sub{color:var(--muted-2);font-size:13.5px;margin-bottom:30px;}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.35;}}
+
+  details.settings{
+    background:var(--panel);border:1px solid var(--line);border-radius:10px;margin-bottom:26px;overflow:hidden;
+  }
+  details.settings summary{
+    cursor:pointer;padding:14px 18px;font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--muted-2);
+    list-style:none;display:flex;align-items:center;justify-content:space-between;
+  }
+  details.settings summary::-webkit-details-marker{display:none;}
+  .settings-body{padding:0 18px 18px;display:grid;gap:12px;}
+  .settings-body .row{display:grid;grid-template-columns:120px 1fr;gap:10px;align-items:center;}
+  .settings-note{font-size:12px;color:var(--muted);background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:10px 12px;}
+
+  label{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--muted-2);text-transform:uppercase;letter-spacing:.05em;}
+  input, textarea, select{
+    width:100%;background:var(--panel-2);border:1px solid var(--line);border-radius:7px;color:var(--text);
+    padding:10px 12px;font-family:'Inter',sans-serif;font-size:14px;
+  }
+  input:focus, textarea:focus, select:focus{outline:none;border-color:var(--teal);}
+  textarea{resize:vertical;min-height:70px;}
+
+  .tabs{display:flex;gap:8px;margin-bottom:22px;}
+  .tab-btn{
+    font-family:'JetBrains Mono',monospace;font-size:12.5px;letter-spacing:.04em;text-transform:uppercase;
+    background:var(--panel);border:1px solid var(--line);color:var(--muted-2);padding:10px 16px;border-radius:7px;cursor:pointer;
+    transition:all .15s;
+  }
+  .tab-btn.active{border-color:var(--teal);color:var(--teal);background:rgba(79,209,197,0.08);}
+
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:22px;display:none;}
+  .panel.active{display:block;}
+  .field{margin-bottom:16px;}
+  .field:last-child{margin-bottom:0;}
+  .checkbox-row{display:flex;align-items:center;gap:8px;}
+  .checkbox-row input{width:auto;}
+  .checkbox-row label{text-transform:none;letter-spacing:0;font-size:13.5px;color:var(--text);}
+
+  .btn{
+    font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:.03em;
+    background:var(--teal);color:#0D1117;border:none;padding:12px 22px;border-radius:7px;cursor:pointer;font-weight:700;
+    transition:opacity .15s;
+  }
+  .btn:hover{opacity:.88;}
+  .btn:disabled{opacity:.4;cursor:not-allowed;}
+  .btn.secondary{background:transparent;border:1px solid var(--line);color:var(--muted-2);font-weight:500;}
+  .btn.secondary:hover{border-color:var(--teal);color:var(--teal);opacity:1;}
+  .actions{display:flex;gap:10px;margin-top:20px;}
+
+  .console{
+    margin-top:28px;background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden;
+  }
+  .console-head{padding:10px 16px;border-bottom:1px solid var(--line);font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted-2);text-transform:uppercase;letter-spacing:.06em;}
+  .console-body{padding:14px 16px;font-family:'JetBrains Mono',monospace;font-size:12.5px;max-height:220px;overflow-y:auto;}
+  .log-line{margin-bottom:5px;color:var(--muted-2);}
+  .log-line.ok{color:var(--teal);}
+  .log-line.err{color:var(--danger);}
+  .log-line.info{color:var(--amber);}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header><span class="dot"></span><h1>publish.sys</h1></header>
+  <p class="sub">Add new content and push it straight to your live site. This writes directly to your GitHub repo — GitHub Pages redeploys automatically within a minute or two.</p>
+
+  <details class="settings" id="settingsBox">
+    <summary>⚙ Connection settings — set this up once <span id="settingsStatus" class="mono" style="font-size:11px;"></span></summary>
+    <div class="settings-body">
+      <div class="row"><label>GitHub user</label><input id="cfgOwner" placeholder="sikunju"></div>
+      <div class="row"><label>Repository</label><input id="cfgRepo" placeholder="portfolio"></div>
+      <div class="row"><label>Branch</label><input id="cfgBranch" placeholder="main" value="main"></div>
+      <div class="row"><label>File path</label><input id="cfgPath" placeholder="index.html" value="index.html"></div>
+      <div class="row"><label>Access token</label><input id="cfgToken" type="password" placeholder="ghp_..."></div>
+      <div class="settings-note">
+        Create a token at <a href="https://github.com/settings/tokens?type=beta" target="_blank" rel="noopener">github.com/settings/tokens</a> (fine-grained → only this repo → Contents: Read and write). It's saved only in this browser's local storage, never sent anywhere except directly to GitHub's API. Keep this admin.html page's link private — anyone who opens it on this device could publish using your saved token.
+      </div>
+      <div><button class="btn secondary" onclick="saveSettings()">Save settings</button> <button class="btn secondary" onclick="testConnection()">Test connection</button></div>
+    </div>
+  </details>
+
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="project" onclick="switchTab('project')">+ Project</button>
+    <button class="tab-btn" data-tab="log" onclick="switchTab('log')">+ Experience</button>
+    <button class="tab-btn" data-tab="cert" onclick="switchTab('cert')">+ Certification</button>
+  </div>
+
+  <!-- PROJECT PANEL -->
+  <div class="panel active" id="panel-project">
+    <div class="field"><label>Date / category tag</label><input id="pTag" placeholder="e.g. 08/2026 – present, or Open source"></div>
+    <div class="field"><label>Status badge</label>
+      <select id="pBadge">
+        <option>ACTIVE</option><option>DEPLOYED</option><option>ONGOING</option><option>COMPLETE</option>
+      </select>
+    </div>
+    <div class="field"><label>Project title</label><input id="pTitle" placeholder="Project name"></div>
+    <div class="field"><label>Link (optional)</label><input id="pLink" placeholder="https://github.com/sikunju/..."></div>
+    <div class="field"><label>Description</label><textarea id="pDesc" placeholder="1-3 sentences about what it does."></textarea></div>
+    <div class="actions"><button class="btn" onclick="publish('project')">Publish project</button></div>
+  </div>
+
+  <!-- EXPERIENCE PANEL -->
+  <div class="panel" id="panel-log">
+    <div class="field"><label>Date range</label><input id="lTime" placeholder="e.g. 08/2026 → present"></div>
+    <div class="field"><label>Location</label><input id="lLocation" placeholder="e.g. Doha, Qatar"></div>
+    <div class="field checkbox-row"><input type="checkbox" id="lCurrent"><label for="lCurrent">This is my current role</label></div>
+    <div class="field"><label>Job title</label><input id="lRole" placeholder="Role"></div>
+    <div class="field"><label>Company</label><input id="lOrg" placeholder="Organization"></div>
+    <div class="field"><label>Responsibilities (one per line)</label><textarea id="lDetails" placeholder="One bullet point per line" style="min-height:110px;"></textarea></div>
+    <div class="actions"><button class="btn" onclick="publish('log')">Publish experience entry</button></div>
+  </div>
+
+  <!-- CERT PANEL -->
+  <div class="panel" id="panel-cert">
+    <div class="field"><label>Certification name</label><input id="cName" placeholder="e.g. AWS Certified Solutions Architect"></div>
+    <div class="field"><label>Issuer</label><input id="cIssuer" placeholder="e.g. Amazon Web Services"></div>
+    <div class="actions"><button class="btn" onclick="publish('cert')">Publish certification</button></div>
+  </div>
+
+  <div class="console">
+    <div class="console-head">status_log</div>
+    <div class="console-body" id="consoleBody"><div class="log-line">Ready. Fill in a form above and hit publish.</div></div>
+  </div>
+
+</div>
+
+<script>
+  // ---------- settings ----------
+  function loadSettings(){
+    try{
+      const s = JSON.parse(localStorage.getItem('kf_admin_settings') || '{}');
+      document.getElementById('cfgOwner').value = s.owner || '';
+      document.getElementById('cfgRepo').value = s.repo || '';
+      document.getElementById('cfgBranch').value = s.branch || 'main';
+      document.getElementById('cfgPath').value = s.path || 'index.html';
+      document.getElementById('cfgToken').value = s.token || '';
+      document.getElementById('settingsStatus').textContent = (s.owner && s.repo && s.token) ? '(configured)' : '(not set up yet)';
+      if(s.owner && s.repo && s.token){ document.getElementById('settingsBox').removeAttribute('open'); }
+    }catch(e){}
+  }
+  function saveSettings(){
+    const s = {
+      owner: document.getElementById('cfgOwner').value.trim(),
+      repo: document.getElementById('cfgRepo').value.trim(),
+      branch: document.getElementById('cfgBranch').value.trim() || 'main',
+      path: document.getElementById('cfgPath').value.trim() || 'index.html',
+      token: document.getElementById('cfgToken').value.trim()
+    };
+    localStorage.setItem('kf_admin_settings', JSON.stringify(s));
+    document.getElementById('settingsStatus').textContent = '(configured)';
+    log('Settings saved to this browser.', 'ok');
+  }
+  function getSettings(){
+    return JSON.parse(localStorage.getItem('kf_admin_settings') || '{}');
+  }
+
+  async function testConnection(){
+    saveSettings();
+    const s = getSettings();
+    if(!s.owner || !s.repo || !s.token){ log('Fill in owner, repo, and token first.', 'err'); return; }
+    log('Testing connection...', 'info');
+    try{
+      const res = await fetch(`https://api.github.com/repos/${s.owner}/${s.repo}/contents/${s.path}?ref=${s.branch}`, {
+        headers: { 'Authorization': `Bearer ${s.token}`, 'Accept': 'application/vnd.github+json' }
+      });
+      if(res.ok){
+        log(`Connected. Found ${s.path} on branch ${s.branch}.`, 'ok');
+      } else {
+        const body = await res.json().catch(()=>({}));
+        log(`Connection failed (${res.status}): ${body.message || res.statusText}`, 'err');
+      }
+    }catch(e){
+      log('Network error: ' + e.message, 'err');
+    }
+  }
+
+  // ---------- tabs ----------
+  function switchTab(tab){
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('panel-' + tab).classList.add('active');
+  }
+
+  // ---------- console log ----------
+  function log(msg, type){
+    const body = document.getElementById('consoleBody');
+    const line = document.createElement('div');
+    line.className = 'log-line' + (type ? ' ' + type : '');
+    const ts = new Date().toLocaleTimeString();
+    line.textContent = `[${ts}] ${msg}`;
+    body.appendChild(line);
+    body.scrollTop = body.scrollHeight;
+  }
+
+  // ---------- base64 helpers (unicode-safe) ----------
+  function utf8ToB64(str){ return btoa(unescape(encodeURIComponent(str))); }
+  function b64ToUtf8(str){ return decodeURIComponent(escape(atob(str))); }
+
+  // ---------- entry builders ----------
+  function buildProjectEntry(d){
+    return `    {
+      tag: ${JSON.stringify(d.tag)},
+      badge: ${JSON.stringify(d.badge)},
+      title: ${JSON.stringify(d.title)},
+      link: ${JSON.stringify(d.link)},
+      desc: ${JSON.stringify(d.desc)}
+    },
+`;
+  }
+  function buildLogEntry(d){
+    const detailsJs = d.details.map(x => `        ${JSON.stringify(x)}`).join(',\n');
+    return `    {
+      time: ${JSON.stringify(d.time)},
+      location: ${JSON.stringify(d.location)},
+      current: ${d.current ? 'true' : 'false'},
+      role: ${JSON.stringify(d.role)},
+      org: ${JSON.stringify(d.org)},
+      details: [
+${detailsJs}
+      ]
+    },
+`;
+  }
+  function buildCertEntry(d){
+    return `    { name: ${JSON.stringify(d.name)}, issuer: ${JSON.stringify(d.issuer)} },\n`;
+  }
+
+  // ---------- main publish flow ----------
+  async function publish(kind){
+    const s = getSettings();
+    if(!s.owner || !s.repo || !s.token){
+      log('Set up your connection settings first (top of page).', 'err');
+      document.getElementById('settingsBox').setAttribute('open', 'true');
+      return;
+    }
+
+    let arrayName, entryText, newEntryIsCurrent = false;
+
+    if(kind === 'project'){
+      const d = {
+        tag: document.getElementById('pTag').value.trim(),
+        badge: document.getElementById('pBadge').value,
+        title: document.getElementById('pTitle').value.trim(),
+        link: document.getElementById('pLink').value.trim(),
+        desc: document.getElementById('pDesc').value.trim()
+      };
+      if(!d.title || !d.desc){ log('Title and description are required.', 'err'); return; }
+      arrayName = 'PROJECTS';
+      entryText = buildProjectEntry(d);
+    } else if(kind === 'log'){
+      const detailsRaw = document.getElementById('lDetails').value.split('\n').map(x=>x.trim()).filter(Boolean);
+      const d = {
+        time: document.getElementById('lTime').value.trim(),
+        location: document.getElementById('lLocation').value.trim(),
+        current: document.getElementById('lCurrent').checked,
+        role: document.getElementById('lRole').value.trim(),
+        org: document.getElementById('lOrg').value.trim(),
+        details: detailsRaw
+      };
+      if(!d.role || !d.org || d.details.length === 0){ log('Job title, company, and at least one responsibility are required.', 'err'); return; }
+      arrayName = 'LOG_ENTRIES';
+      entryText = buildLogEntry(d);
+      newEntryIsCurrent = d.current;
+    } else if(kind === 'cert'){
+      const d = {
+        name: document.getElementById('cName').value.trim(),
+        issuer: document.getElementById('cIssuer').value.trim()
+      };
+      if(!d.name){ log('Certification name is required.', 'err'); return; }
+      arrayName = 'CERTIFICATIONS';
+      entryText = buildCertEntry(d);
+    }
+
+    log(`Fetching current ${s.path}...`, 'info');
+    let fileRes, fileData;
+    try{
+      fileRes = await fetch(`https://api.github.com/repos/${s.owner}/${s.repo}/contents/${s.path}?ref=${s.branch}`, {
+        headers: { 'Authorization': `Bearer ${s.token}`, 'Accept': 'application/vnd.github+json' }
+      });
+      fileData = await fileRes.json();
+      if(!fileRes.ok) throw new Error(fileData.message || fileRes.statusText);
+    }catch(e){
+      log('Failed to fetch file: ' + e.message, 'err');
+      return;
+    }
+
+    let content = b64ToUtf8(fileData.content.replace(/\n/g, ''));
+
+    const re = new RegExp(`(const ${arrayName} = \\[\\r?\\n)`);
+    if(!re.test(content)){
+      log(`Could not find "${arrayName}" array in ${s.path}. Is this the right file?`, 'err');
+      return;
+    }
+
+    // If publishing a new current role, un-flag any previously current entry
+    if(newEntryIsCurrent){
+      content = content.replace(/current: true/, 'current: false');
+    }
+
+    content = content.replace(re, `$1${entryText}`);
+
+    log('Uploading update...', 'info');
+    try{
+      const putRes = await fetch(`https://api.github.com/repos/${s.owner}/${s.repo}/contents/${s.path}`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${s.token}`,
+          'Accept': 'application/vnd.github+json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          message: `Add ${kind}: ${document.getElementById(kind==='project'?'pTitle':kind==='log'?'lRole':'cName').value.trim()}`,
+          content: utf8ToB64(content),
+          sha: fileData.sha,
+          branch: s.branch
+        })
+      });
+      const putData = await putRes.json();
+      if(!putRes.ok) throw new Error(putData.message || putRes.statusText);
+      log('Published! Commit: ' + putData.commit.sha.slice(0,7), 'ok');
+      log('Your site will update automatically in about a minute.', 'ok');
+      clearForm(kind);
+    }catch(e){
+      log('Publish failed: ' + e.message, 'err');
+    }
+  }
+
+  function clearForm(kind){
+    if(kind === 'project'){ ['pTag','pTitle','pLink','pDesc'].forEach(id => document.getElementById(id).value = ''); }
+    if(kind === 'log'){ ['lTime','lLocation','lRole','lOrg','lDetails'].forEach(id => document.getElementById(id).value = ''); document.getElementById('lCurrent').checked = false; }
+    if(kind === 'cert'){ ['cName','cIssuer'].forEach(id => document.getElementById(id).value = ''); }
+  }
+
+  loadSettings();
+</script>
+</body>
+</html>
